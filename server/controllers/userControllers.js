@@ -1,7 +1,8 @@
 import User from "../models/userModels.js"
 export const getAllUsers = async (req,res)=>{
      try {
-        const allUsers = await User.find({});
+        const loggedIdUser = req.user._id;
+        const allUsers = await User.find({_id:{$ne:loggedIdUser}}).select("-password");
         res.status(201).json(allUsers)
      } catch (error) {
         console.log('Error at getting all Users : ',error.message);
