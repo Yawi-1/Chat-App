@@ -3,7 +3,7 @@ import { CiLogout } from "react-icons/ci";
 const LogoutButton = () => {
   return (
     <div
-    className='cursor-pointer px-2 text-gray-300 font-semibold mt-16'><CiLogout size={28}/></div>
+    className=' cursor-pointer px-2 text-gray-300 font-semibold md:mt-16'><CiLogout size={28}/></div>
   )
 }
 
