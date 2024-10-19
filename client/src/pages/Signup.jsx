@@ -1,8 +1,12 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom';
-import {toast} from 'react-hot-toast'
+import { toast } from 'react-hot-toast'
 import { Spinner } from '../components/Spinner/Spinner';
+import { useAuth } from '../context/AuthContext';
+
 const Signup = () => {
+  const {loading, setLoading} = useAuth();
+  const {setAuthUser} = useAuth();
   const [userData, setUserData] = useState({
     fullName: '',
     username: '',
@@ -10,25 +14,22 @@ const Signup = () => {
     confirmPassword: '',
     gender: ''
   })
-  const [loading,setLoading] = useState(false);
-
-
-
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setUserData((prevData) => ({ ...prevData, [name]: value }));
   }
 
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if(userData.password.length < 6 ){
+    if (userData.password.length < 6) {
       toast.error("Password must be at least 6 characters");
-      return ;
+      return;
     }
     if (userData.password !== userData.confirmPassword) {
       toast.error("Password doesn't match..")
-      return ;
+      return;
     }
     try {
       setLoading(true);
@@ -40,24 +41,26 @@ const Signup = () => {
         body: JSON.stringify(userData)
       })
       const data = await res.json()
-       if (data.error) {
+      if (data.error) {
         toast.error(data.error)
-        return ;
-       }
-       toast.success("Signup Successfull");
+        return;
+      }
+      localStorage.setItem('userInfo', JSON.stringify(data));
+      setAuthUser(data);
+      toast.success("Signup Successfull");
     } catch (error) {
-      console.log('Error at sign up Page Client : ',error)
+      console.log('Error at sign up Page Client : ', error)
     }
-    finally{
+    finally {
       setLoading(false)
     }
   }
-      
+
 
   return (
     <div className='flex flex-col min-w-96 mx-auto'>
       {
-        loading && <Spinner/>
+        loading && <Spinner />
       }
       <div className='p-6 w-full rounded-lg bg-gray-400 backdrop-filter bg-clip-padding  backdrop-blur-lg bg-opacity-0 '>
         <h1 className='text-3xl text-center font-semibold text-gray-300'>Sign up
