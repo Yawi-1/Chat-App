@@ -5,7 +5,6 @@ const generateTokensAndSetCookie =(userId,res)=>{
     res.cookie('jwt',token,{
         httpOnly:true, //prevent XSS attacks
         maxAge:1000*60*60*24,
-        sameSite:"strict",
     });
 };
 
