@@ -1,23 +1,66 @@
-import React,{useState,useContext,createContext} from "react";
-
+import React, { useState, useContext, createContext } from "react";
 
 // Auth context 
-export const AuthContext =createContext();
+export const AuthContext = createContext();
 
+// Hook to use AuthContext
+export const useAuth = () => {
+  return useContext(AuthContext);
+};
 
-// Hook for use this useAuth
-export const useAuth =()=>{
-  return useContext(AuthContext)
-}
+// Main context provider, wrap this around the main app
+export const AuthContextProvider = ({ children }) => {
+  const [authUser, setAuthUser] = useState(JSON.parse(localStorage.getItem('userInfo')));
+  const [conversations, setConversations] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [filteredUsers, setFilteredUsers] = useState([]);  // Stores search result
+  const [searchInput, setSearchInput] = useState("");      // Handles user input
 
+  // Fetch all users
+  const getAllUsers = async () => {
+    try {
+      const res = await fetch('http://localhost:8000/api/users/all', {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        method: 'GET',
+        credentials: 'include'
+      });
+      const data = await res.json();
+      setConversations(data); // All users data
+      setFilteredUsers(data);  // Initially, filteredUsers shows all conversations
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
-// Main content and functionality , wrap this with main app
-export const AuthContextProvider =({children})=>{
-    const [authUser, setAuthUser] = useState(JSON.parse(localStorage.getItem('userInfo')));
-    const [loading, setLoading] = useState(false);
+  // Search user by name, triggered by clicking the search button
+  const searchUser = (e) => {
+    e.preventDefault();
+    if (searchInput.trim() === "") {
+      setFilteredUsers(conversations);  // Show all if search is empty
+    } else {
+      const lowercasedInput = searchInput.toLowerCase();
+      setFilteredUsers(conversations.filter((item) => {
+        return item.username.toLowerCase().includes(lowercasedInput);
+      }));
+    }
+  };
 
-
-  return <AuthContext.Provider value={{authUser,setAuthUser,loading, setLoading}} >
-    {children}
-  </AuthContext.Provider>
+  return (
+    <AuthContext.Provider value={{ 
+      authUser, 
+      setAuthUser, 
+      loading, 
+      setLoading, 
+      searchInput, 
+      setSearchInput, 
+      getAllUsers, 
+      conversations, 
+      searchUser, 
+      filteredUsers 
+    }}>
+      {children}
+    </AuthContext.Provider>
+  );
 }
