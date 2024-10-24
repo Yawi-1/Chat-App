@@ -1,6 +1,6 @@
 import User from '../models/userModels.js'
 import bcrypt from 'bcryptjs';
-import generateTokensAndSetCookie from '../utils/generateTokens.js';
+import jwt from 'jsonwebtoken'
 
 export const signup = async (req, res) => {
   try {
@@ -35,7 +35,9 @@ export const signup = async (req, res) => {
     if(newUser){
 
       // Generate JWT token
-    generateTokensAndSetCookie(newUser._id, res);
+      const token = jwt.sign({userId:user._id},process.env.JWT_SECRET_KEY,{
+        expiresIn:'7d'
+      })
       await newUser.save();
       return res.status(201).json({ 
         _id: newUser._id, 
@@ -43,6 +45,7 @@ export const signup = async (req, res) => {
         username: newUser.username, 
         password: newUser.password,
         profilePic: newUser.profilePic,
+        token
       })
     }
     else{
@@ -72,12 +75,17 @@ export const login = async (req, res) => {
       return res.status(400).json({error:"Invalid password"})
     }
         
-       generateTokensAndSetCookie(user._id,res);
+    // Generate token
+ const token = jwt.sign({userId:user._id},process.env.JWT_SECRET_KEY,{
+      expiresIn:'7d'
+    })
+   
        return res.status(200).json({
         _id: user._id,
         fullName: user.fullName,
         username: user.username,
-        profilePic: user.profilePic
+        profilePic: user.profilePic,
+        token,
         })
 
   } catch(error){

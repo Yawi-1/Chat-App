@@ -1,8 +1,9 @@
-import React from 'react'
+import React,{useEffect} from 'react'
 import MesageHeader from './MesageHeader'
 import MessageContent from './MessageContent'
 import MessageInput from './MessageInput'
 import { TiMessages } from "react-icons/ti";
+import useConversation from '../../zustand/useConversation'
 
 const NoChatSelected = ()=>{
   return(
@@ -14,13 +15,17 @@ const NoChatSelected = ()=>{
   )
 }
 const MessageContainer = () => {
-  const noChatSelected = true;
+  const {selectedConversation, setSelectedConversation} = useConversation();
+
+  useEffect(()=>{
+    return ()=> setSelectedConversation(null)
+  },[])
   return (
     <div className='md:min-w-[450px] hidden md:flex flex-col'>
       {
-        noChatSelected ? <NoChatSelected /> : (
+        !selectedConversation  ? <NoChatSelected /> : (
           <>
-            <MesageHeader />
+            <MesageHeader selectedConversation={selectedConversation} />
             <MessageContent />
             <MessageInput />
           </>

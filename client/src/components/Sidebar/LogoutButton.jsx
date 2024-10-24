@@ -18,7 +18,9 @@ const LogoutButton = () => {
       }
       toast.success(data.message)
       localStorage.removeItem('userInfo');
-      window.location.reload();
+      setTimeout(()=>{
+        window.location.reload();
+      },200)
       setLoading(false);
     } catch (error) {
       console.log('Error at logout page:', error);

@@ -29,13 +29,13 @@ const Login = () => {
                 body: JSON.stringify({ username: userName, password })
             })
             const data = await res.json();
-            if(data.error){
+            if (data.error) {
                 toast.error(data.error)
                 return;
             }
+            toast.success('Logged In Successfully.....')
             localStorage.setItem('userInfo', JSON.stringify(data))
             setAuthUser(data)
-            toast.success(data.message)
         } catch (error) {
             console.log('Login page error:', error)
         } finally {

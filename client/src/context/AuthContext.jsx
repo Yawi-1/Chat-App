@@ -17,11 +17,13 @@ export const AuthContextProvider = ({ children }) => {
   const [searchInput, setSearchInput] = useState("");      // Handles user input
 
   // Fetch all users
+  const token = authUser?.token;
   const getAllUsers = async () => {
     try {
       const res = await fetch('http://localhost:8000/api/users/all', {
         headers: {
           'Content-Type': 'application/json',
+          'Authorization':`Bearer ${token}`
         },
         method: 'GET',
         credentials: 'include'
@@ -47,6 +49,15 @@ export const AuthContextProvider = ({ children }) => {
     }
   };
 
+  function clearInput(){
+    setSearchInput("");
+    setFilteredUsers(conversations);
+  }
+
+
+  // Select a chat of single user...
+  const [chatSelected,setSelectedChat] = useState(false);
+
   return (
     <AuthContext.Provider value={{ 
       authUser, 
@@ -58,7 +69,10 @@ export const AuthContextProvider = ({ children }) => {
       getAllUsers, 
       conversations, 
       searchUser, 
-      filteredUsers 
+      filteredUsers ,
+      clearInput,
+      chatSelected,
+      setSelectedChat
     }}>
       {children}
     </AuthContext.Provider>

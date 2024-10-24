@@ -5,6 +5,7 @@ import { useAuth } from '../../context/AuthContext';
 const Conversations = () => {
   const { getAllUsers, filteredUsers } = useAuth();
 
+
   useEffect(() => { 
     getAllUsers();
   }, []);
