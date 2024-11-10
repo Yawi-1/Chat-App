@@ -9,11 +9,11 @@ const MessageInput = () => {
   const {authUser} = useAuth();
   const token = authUser?.token;
 
-
-
- 
   const sendMessage = async (e)=>{
     e.preventDefault();
+    if(input.trim() === ""){
+      return;
+    }
     try {
       const res = await fetch(`http://localhost:8000/api/message/send/${selectedConversation._id}`,{
         method: 'POST',
@@ -21,14 +21,13 @@ const MessageInput = () => {
           'Content-Type': 'application/json',
           'Authorization':`Bearer ${token}`
         },
-        body:JSON.stringify(input)
+        body:JSON.stringify({message:input}),
       });
       const data = await res.json();
-      console.log('Data: ',data);
-      console.log('Message: ',messages);
       setMessages([...messages,data]);
+      setInput("");
     } catch (error) {
-      console.log(error)
+      console.log('Error at Message Input: ',error)
     }
   }
 

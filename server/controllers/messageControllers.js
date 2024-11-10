@@ -3,7 +3,7 @@ import Message from '../models/messageModels.js'
 export const sendMessage = async (req, res) => {
     try {
         const { id: recieverId } = req.params;
-        const senderId = req.user._id;
+        const senderId = req.user.userId;
         const { message } = req.body;
         if (!message) {
             return res.status(400).json({ error: "Message is required" });
@@ -36,8 +36,6 @@ export const sendMessage = async (req, res) => {
         }
         res.json(newMessage)
 
-
-
     } catch (error) {
         console.log('Error at message controllers: ', error.message)
         res.status(500).json({ error: 'Error In message controller' })
@@ -46,16 +44,19 @@ export const sendMessage = async (req, res) => {
 }
 
 export const getMessage = async (req, res) => {
+    const sanitizeId = (id) => (id.startsWith(":") ? id.slice(1) : id);
     try {
         const { id: userToChatId } = req.params;
-        const senderId = req.user._id;
+        const senderId = req.user.userId;
+        const sanitizedSenderId = sanitizeId(senderId);
+        const sanitizedUserToChatId = sanitizeId(userToChatId);
         const conversation = await Conversation.findOne({
             participants: {
-                $all: [senderId, userToChatId]
+                $all: [sanitizedSenderId, sanitizedUserToChatId]
             }
         }).populate("messages");
         if (!conversation) {
-            return res.status(404).json([]);
+            return res.status(404).json(['Hurrah i found the problem... ']);
         }
 
         const messages = conversation.messages;

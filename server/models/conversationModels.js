@@ -13,5 +13,5 @@ const conservationSchema = mongoose.Schema({
         default:[]
     }]
 },{timestamps:true});
-const Conversation = mongoose.model('Conservation',conservationSchema);
+const Conversation = mongoose.model('Conversation',conservationSchema);
 export default Conversation;

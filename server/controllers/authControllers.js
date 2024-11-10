@@ -35,10 +35,10 @@ export const signup = async (req, res) => {
     if(newUser){
 
       // Generate JWT token
-      const token = jwt.sign({userId:user._id},process.env.JWT_SECRET_KEY,{
+      await newUser.save();
+      const token = jwt.sign({userId:newUser._id},process.env.JWT_SECRET_KEY,{
         expiresIn:'7d'
       })
-      await newUser.save();
       return res.status(201).json({ 
         _id: newUser._id, 
         fullName: newUser.fullName, 
