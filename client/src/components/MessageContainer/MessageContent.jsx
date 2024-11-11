@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import Message from './Message'
 import useConversation from '../../zustand/useConversation'
 import { useAuth } from '../../context/AuthContext'
 const MessageContent = () => {
 
   const  {messages,setMessages,selectedConversation} = useConversation();
-  const [messageData,setMessageData] = useState([]);
   const {authUser} = useAuth();
   const token = authUser?.token;
   const getMessages = async ()=>{
@@ -18,9 +17,7 @@ const MessageContent = () => {
         }
       });
       const data = await response.json();
-      setMessageData(data);
-      console.log('Mesage data:',data);
-     
+      setMessages(data);
     } catch (error) {
       console.log('Error at getting message : ',error)
     }
@@ -30,10 +27,18 @@ const MessageContent = () => {
     getMessages();
     },[selectedConversation,setMessages])
 
+
   return (
     <div className='px-4 flex-1 overflow-auto no-scrollbar max-h-[30rem]'>
-    <Message chat={"start"}/>
-    <Message chat={"end"}/>
+
+      {
+        messages.length == 0 && <h1 className='text-center text-sm p-2 font-semibold text-white'>Send a message to start conversation.</h1>
+      }
+      {
+       messages.length > 0 &&  messages.map((msg)=>{
+          return <Message key={msg._id} message={msg} selectedConversation={selectedConversation} />
+        })
+      }
     </div>
   )
 }

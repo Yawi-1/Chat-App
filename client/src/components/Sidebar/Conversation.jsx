@@ -5,7 +5,7 @@ import useConversation from '../../zustand/useConversation'
 
 const Conversation = ({conversation}) => {
 
-  const {_id,username,fullName,gender,profilePic} = conversation;
+  const {_id,username,profilePic} = conversation;
   const {selectedConversation,setSelectedConversation} = useConversation();
   const isSelected = selectedConversation?._id === _id;
   return (

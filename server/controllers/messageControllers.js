@@ -56,11 +56,11 @@ export const getMessage = async (req, res) => {
             }
         }).populate("messages");
         if (!conversation) {
-            return res.status(404).json(['Hurrah i found the problem... ']);
+            return res.status(404).json([]);
         }
 
         const messages = conversation.messages;
-        res.status(200).json(messages)
+        return res.status(200).json(messages)
 
     } catch (error) {
         console.log('Error at get message controllers: ', error.message)
