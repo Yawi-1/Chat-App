@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react'
 import Message from './Message'
 import useConversation from '../../zustand/useConversation'
-import { useAuth } from '../../context/AuthContext'
+import { useAuth } from '../../context/AuthContext';
+import useListenMessages from '../../hooks/useListenMessage';
 const MessageContent = () => {
 
   const  {messages,setMessages,selectedConversation} = useConversation();
@@ -23,6 +24,7 @@ const MessageContent = () => {
     }
   }
 
+  useListenMessages();
   useEffect(()=>{
     getMessages();
     },[selectedConversation,setMessages])
@@ -30,14 +32,13 @@ const MessageContent = () => {
 
   return (
     <div className='px-4 flex-1 overflow-auto no-scrollbar max-h-[30rem]'>
-
       {
-        messages.length == 0 && <h1 className='text-center text-sm p-2 font-semibold text-white'>Send a message to start conversation.</h1>
-      }
-      {
-       messages.length > 0 &&  messages.map((msg)=>{
+        messages.length > 0 &&  messages.map((msg)=>{
           return <Message key={msg._id} message={msg} selectedConversation={selectedConversation} />
         })
+      }
+      {
+        messages.length == 0 && <h1 className='text-center text-sm p-2 font-semibold text-white'>Send a message to start conversation.</h1>
       }
     </div>
   )
