@@ -23,7 +23,7 @@ const Message = ({message,selectedConversation}) => {
         src={`${isSender ? authUser.profilePic : selectedConversation?.profilePic }`} />
     </div>
   </div>
-  <div className={`chat-bubble max-w-72 ${isSender && 'bg-blue-500 text-white'}`}>{message.message}</div>
+  <div className={`chat-bubble max-w-36 ${isSender && 'bg-blue-500 text-white'}`}>{message.message}</div>
  {hours}:{minutes}
 </div>
   )

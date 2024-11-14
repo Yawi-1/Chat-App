@@ -11,7 +11,7 @@ const Conversations = () => {
   }, []);
 
   return (
-    <div className='flex flex-col max-h-[25rem] no-scrollbar overflow-auto'>
+    <div className='flex flex-col max-h-[11rem] md:max-h-[25rem] no-scrollbar overflow-auto'>
       {filteredUsers.length > 0 ? (
         filteredUsers.map((conversation, index) => (
           <Conversation key={index} conversation={conversation} />
