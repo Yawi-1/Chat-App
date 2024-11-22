@@ -5,12 +5,17 @@ import MessageInput from './MessageInput'
 import { TiMessages } from "react-icons/ti";
 import useConversation from '../../zustand/useConversation'
 import { useAuth } from '../../context/AuthContext';
+import { useTheme } from '../../context/ThemeContext';
+import { CiDark } from "react-icons/ci";
+import { CiLight } from "react-icons/ci";
 
 
 const NoChatSelected = ()=>{
   const {authUser} = useAuth();
+  const {theme,toggleTheme} = useTheme();
   return(
     <div className='flex flex-col h-[35rem]  items-center justify-center'>
+     <span className='cursor-pointer' onClick={toggleTheme}>{theme === 'light' ?  <CiDark size={24}/> : <CiLight size={24}/>}</span>
       <p className='font-bold text-xl py-2'>Welcome 👋 {authUser?.fullName}  </p>
       <p className='font-semibold text-lg pb-2'>Select a chat to start messaging. </p>
       <span className='my-4'><TiMessages size={60}/></span>

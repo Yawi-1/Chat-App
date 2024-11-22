@@ -27,7 +27,7 @@ const Conversation = ({conversation}) => {
 
       <div className="flex flex-col flex-1">
         <div className='flex gap-4 justify-between'>
-          <p className='capitalize font-bold  text-gray-200 px-4'>{username}</p>
+          <p className='capitalize font-bold  px-4'>{username}</p>
           <span className='text-xl'>{getRandomEmoji()}</span>
         </div>
       </div>

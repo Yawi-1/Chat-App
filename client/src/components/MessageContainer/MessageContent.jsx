@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef } from 'react'
 import Message from './Message'
 import useConversation from '../../zustand/useConversation'
 import { useAuth } from '../../context/AuthContext';
@@ -8,6 +8,7 @@ const MessageContent = () => {
   const  {messages,setMessages,selectedConversation} = useConversation();
   const {authUser} = useAuth();
   const token = authUser?.token;
+  const messagesEndRef = useRef();
   const getMessages = async ()=>{
     try {
       const response = await fetch(`http://localhost:8000/api/message/:${selectedConversation?._id}`,{
@@ -25,10 +26,17 @@ const MessageContent = () => {
   }
 
   useListenMessages();
+  
   useEffect(()=>{
     getMessages();
-    },[selectedConversation,setMessages])
+    },[selectedConversation])
 
+
+    useEffect(() => {
+      if (messagesEndRef.current) {
+        messagesEndRef.current.scrollIntoView({ behavior: 'auto' });
+      }
+    }, [messages]);
 
   return (
     <div className='px-4 flex-1 overflow-auto no-scrollbar max-h-[30rem]'>
@@ -40,6 +48,7 @@ const MessageContent = () => {
       {
         messages.length == 0 && <h1 className='text-center text-sm p-2 font-semibold text-white'>Send a message to start conversation.</h1>
       }
+       <div ref={messagesEndRef}></div>
     </div>
   )
 }

@@ -20,3 +20,12 @@ body{
         scrollbar-width: none;  
   }
 }
+
+.lightmode {
+    color: black;
+    background-color: white;
+}
+.darkmode {
+    color: white;
+    background-color: black;
+}

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { BsSend } from "react-icons/bs";
 import useConversation from '../../zustand/useConversation';
 import {useAuth} from '../../context/AuthContext'
@@ -8,10 +8,11 @@ const MessageInput = () => {
   const [input,setInput] = useState("");
   const {authUser} = useAuth();
   const token = authUser?.token;
-
+  const inputRef = useRef();
   const sendMessage = async (e)=>{
     e.preventDefault();
     if(input.trim() === ""){
+      inputRef.current.focus();
       return;
     }
     try {
@@ -34,7 +35,7 @@ const MessageInput = () => {
   return (
     <form className='px-4 my-3' onSubmit={sendMessage}>
       <div className='w-full flex gap-4 '>
-        <input type="text" value={input} onChange={(e)=>setInput(e.target.value)} name="" id="" className='flex-1 px-4 py-2 rounded' placeholder='Message' />
+        <input ref={inputRef} type="text" value={input} onChange={(e)=>setInput(e.target.value)} name="" id="" className='flex-1 px-4 py-2 rounded' placeholder='Message' />
         <button className='flex items-center justify-center hover:bg-green-400 bg-green-500 text-white rounded-full h-12 w-12'><BsSend size={24}/></button>
       </div>
     </form>
